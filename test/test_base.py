@@ -15,10 +15,8 @@ class TestClass(unittest.TestCase):
 
             coords = zones['data'][x]['geojson']['geometry']['coordinates'][0]
 
-            for i in range(5, 45,5):
-                "i is for 1-40 feet expansion for every zone"
-                #if i == 18 or i == 9 or i == 16 or i == 41:
-                 #   i = i + 1
+            for i in range(5, 85,5):
+                "i is for 5-40 feet expansion for every zone"
 
                 "Test if function sends back same coordinates"
                 self.assertEqual(utils.coord_extend(coords=coords, feet_expand=i),

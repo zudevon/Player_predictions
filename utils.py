@@ -6,52 +6,72 @@ def test_me():
 
 
 def coord_extend(coords, feet_expand):
-
-    if feet_expand > 40:
-        raise ValueError("You can only expand zone up to 40 ft")
     if feet_expand <= 0:
         raise ValueError("Negative value input")
     if feet_expand % 5 != 0:
         raise ValueError("Expansion values must be multiples of 5")
+
     def lat_convert(n):
         degrees = n / 305775
         return degrees
 
-    # def coordinate_get(x):
-    # return [(i[0], i[1]) for i in x]
+    if feet_expand <= 40:
 
-    # get = coordinate_get(coords)
+        feet_expand = lat_convert(feet_expand)
 
-    feet_expand = lat_convert(feet_expand)
+        obj1 = LinearRing(coords)
 
-    obj = LinearRing(coords)
+        offset_1a = obj1.parallel_offset(feet_expand, 'left', join_style=2, mitre_limit=1000.0)
+        offset_2a = obj1.parallel_offset(feet_expand, 'right', join_style=2, mitre_limit=1000.0)
 
-    #try catch
-    offset_1 = obj.parallel_offset(feet_expand, 'left', join_style=2, mitre_limit=1000.0)
-    offset_2 = obj.parallel_offset(feet_expand, 'right', join_style=2, mitre_limit=1000.0)
+        offset_a = offset_1a if offset_1a.length > offset_2a.length else offset_2a
 
-    offset = offset_1 if offset_1.length > offset_2.length else offset_2
+        new_offset_a = LinearRing(offset_a)
 
-    #if offset_1.length > offset_2.length:
-     #   orient = 'left'
-    #else:
-     #   orient = 'right'
+        new_coords_a = list(new_offset_a.coords)
 
-        #offset = obj.parallel_offset(feet_expand, orient, join_style=2, mitre_limit=1000.0)
-    new_offset = LinearRing(offset)
-    #try:
-      # offset = LinearRing(offset)
-    #except NotImplementedError as e:
-       #try:
-           #offset = obj.parallel_offset(feet_expand+1, orient, join_style=2, mitre_limit=1000.0)
-       #except NotImplementedError as e:
-           #pass
+        def coordinate_give(x):
+            return [[i[0], i[1]] for i in x]
 
-    new_coords = list(new_offset.coords)
+        give_a = coordinate_give(new_coords_a)
 
-    def coordinate_give(x):
-        return [[i[0], i[1]] for i in x]
+        return give_a
 
-    give = coordinate_give(new_coords)
 
-    return give
+    else:
+
+        feet_expand = lat_convert(feet_expand/2)
+
+        obj1 = LinearRing(coords)
+
+        offset_1a = obj1.parallel_offset(feet_expand, 'left', join_style=2, mitre_limit=1000.0)
+        offset_2a = obj1.parallel_offset(feet_expand, 'right', join_style=2, mitre_limit=1000.0)
+
+        offset_a = offset_1a if offset_1a.length > offset_2a.length else offset_2a
+
+        new_offset_a = LinearRing(offset_a)
+
+        new_coords_a = list(new_offset_a.coords)
+
+        def coordinate_give(x):
+            return [[i[0], i[1]] for i in x]
+
+        give_a = coordinate_give(new_coords_a)
+
+        obj2 = LinearRing(give_a)
+
+        offset_1b = obj2.parallel_offset(feet_expand, 'left', join_style=2, mitre_limit=1000.0)
+        offset_2b = obj2.parallel_offset(feet_expand, 'right', join_style=2, mitre_limit=1000.0)
+
+        offset_b = offset_1b if offset_1b.length > offset_2b.length else offset_2b
+
+        new_offset_b = LinearRing(offset_b)
+
+        new_coords_b = list(new_offset_b.coords)
+
+        def coordinate_give(x):
+            return [[i[0], i[1]] for i in x]
+
+        give_b = coordinate_give(new_coords_b)
+
+        return give_b
