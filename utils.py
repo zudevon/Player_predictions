@@ -41,7 +41,6 @@ def coord_extend(coords, feet_expand):
     new_offset = LinearRing(offset)
     #try:
       # offset = LinearRing(offset)
-
     #except NotImplementedError as e:
        #try:
            #offset = obj.parallel_offset(feet_expand+1, orient, join_style=2, mitre_limit=1000.0)
