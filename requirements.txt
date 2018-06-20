@@ -1,0 +1,11 @@
+shapely=1.6.4
+matplotlib=2.2.2
+sklearn=0.19.1
+
+numpy
+math
+matplotlib.pyplot
+matplotlib.pyplot
+shapely.geometry
+sklearn.cluster.KMeans
+simplejson
