@@ -7,9 +7,11 @@ def test_me():
 
 def coord_extend(coords, feet_expand):
     if feet_expand <= 0:
-        raise ValueError("Negative value input")
+        raise ValueError("Cannot expand zone by negative value.")
     if feet_expand % 5 != 0:
-        raise ValueError("Expansion values must be multiples of 5")
+        raise ValueError("Expansion values must be multiples of 5.")
+    if feet_expand < 195:
+        raise ValueError("Cannot expand zone any further than 195ft.")
 
     def lat_convert(n):
         degrees = n / 305775

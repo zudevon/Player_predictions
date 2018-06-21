@@ -16,7 +16,7 @@ class TestClass(unittest.TestCase):
 
             coords = zones['data'][x]['geojson']['geometry']['coordinates'][0]
 
-            for i in range(5, 2001, 5):
+            for i in range(5, 200, 5):
 
                 """"Test if function sends back same coordinates"""
                 self.assertEqual(utils.coord_extend(coords=coords, feet_expand=i),
