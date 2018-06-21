@@ -1,5 +1,5 @@
 from shapely.geometry import LinearRing
-
+import math
 
 def test_me():
     return True
@@ -14,6 +14,9 @@ def coord_extend(coords, feet_expand):
     def lat_convert(n):
         degrees = n / 305775
         return degrees
+
+    def coordinate_give(x):
+        return [[i[0], i[1]] for i in x]
 
     if feet_expand <= 40:
 
@@ -30,17 +33,15 @@ def coord_extend(coords, feet_expand):
 
         new_coords_a = list(new_offset_a.coords)
 
-        def coordinate_give(x):
-            return [[i[0], i[1]] for i in x]
-
         give_a = coordinate_give(new_coords_a)
 
         return give_a
 
-
     else:
 
-        feet_expand = lat_convert(feet_expand/2)
+        divisor = math.ceil(feet_expand / 40)
+        give_b = []
+        feet_expand = lat_convert(feet_expand / divisor)
 
         obj1 = LinearRing(coords)
 
@@ -53,25 +54,24 @@ def coord_extend(coords, feet_expand):
 
         new_coords_a = list(new_offset_a.coords)
 
-        def coordinate_give(x):
-            return [[i[0], i[1]] for i in x]
+        new_coords_a = coordinate_give(new_coords_a)
 
-        give_a = coordinate_give(new_coords_a)
+        for i in (range(1, divisor + 1)):
 
-        obj2 = LinearRing(give_a)
+            if give_b != []:
+                obj2 = LinearRing(give_b)
+            else:
+                obj2 = LinearRing(new_coords_a)
 
-        offset_1b = obj2.parallel_offset(feet_expand, 'left', join_style=2, mitre_limit=1000.0)
-        offset_2b = obj2.parallel_offset(feet_expand, 'right', join_style=2, mitre_limit=1000.0)
+            offset_1b = obj2.parallel_offset(feet_expand, 'left', join_style=2, mitre_limit=1000.0)
+            offset_2b = obj2.parallel_offset(feet_expand, 'right', join_style=2, mitre_limit=1000.0)
 
-        offset_b = offset_1b if offset_1b.length > offset_2b.length else offset_2b
+            offset_b = offset_1b if offset_1b.length > offset_2b.length else offset_2b
 
-        new_offset_b = LinearRing(offset_b)
+            new_offset_b = LinearRing(offset_b)
 
-        new_coords_b = list(new_offset_b.coords)
+            new_coords_b = list(new_offset_b.coords)
 
-        def coordinate_give(x):
-            return [[i[0], i[1]] for i in x]
-
-        give_b = coordinate_give(new_coords_b)
+            give_b = coordinate_give(new_coords_b)
 
         return give_b
