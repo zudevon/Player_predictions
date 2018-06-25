@@ -41,7 +41,7 @@ for i in range(0, 478):
 
 sheet1.columns = ['ap_name', 'ssid', 'mac', 'site', 'building', 'room']
 
-data['data'] = []
+data = []
 
 for i in range(0, 206):
 
@@ -50,9 +50,6 @@ for i in range(0, 206):
         if pd.notna(sheet1['ap_name'][i]):  # check to see if you have an item in the row.
 
             temp_dict = {}
-
-            # created timestamp
-            temp_dict['created_timestamp'] = 0
 
             # add ssid
             temp_dict['ssid'] = sheet1['ap_name'][i]
@@ -72,7 +69,7 @@ for i in range(0, 206):
             temp_dict['description'] = ""
 
             # Vereified set to true
-            temp_dict['verified'] = True
+            temp_dict['verified'] = False
 
             # Floors set to a list
             temp_dict['floors'] = []
@@ -83,7 +80,7 @@ for i in range(0, 206):
             # serial  set to a string
             temp_dict['serial'] = ""
 
-            data['data'].append(temp_dict)
+            data.append(temp_dict)
 
 
 jsonfile2 = open('file2.json', 'w')

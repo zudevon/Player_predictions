@@ -2,6 +2,9 @@
 import requests
 import simplejson as json
 import base64
+from typing import List, Dict, Any
+from ap_upload_tm import apUploadTMDevon
+from ap_upload_tm import APs
 
 
 class API(object):
@@ -26,7 +29,6 @@ class API(object):
     def _response(cls, out):
         if out.status_code == 200:
             return (out.json() or {}).get("data")
-
         raise Exception("{}: {}".format(out.status_code, out.text))
 
     def _build_url(self, url: str) -> str:
@@ -38,12 +40,23 @@ class API(object):
 
     def post(self, url: str, body: Dict[str, Any], params: Dict[str, Any] = None):
         url = self._build_url(url=url)
-        return self._response(requests.post(url=url, data=jsonify(body), params=params, headers=self.headers))
+        return self._response(requests.post(url=url, data=json.dumps(body), params=params, headers=self.headers))
 
     def put(self, url: str, body: Dict[str, Any], params: Dict[str, Any] = None):
         url = self._build_url(url=url)
-        return self._response(requests.put(url=url, data=jsonify(body), params=params, headers=self.headers))
+        return self._response(requests.put(url=url, data=json.dumps(body), params=params, headers=self.headers))
 
     def delete(self, url: str):
         url = self._build_url(url=url)
-        return self._resonse(requests.delete(url=url, headers=self.headers))p
+        return self._resonse(requests.delete(url=url, headers=self.headers))
+
+
+myapi = API(username="devon.rasch@degreeanalytics.com", password="123.Devon")
+
+school_id = "d22a7e00-dca9-4d02-84f6-6d52f73ecd18"
+dictionary = apUploadTMDevon.data
+
+for i in apUploadTMDevon.data:
+
+    my_new_ap = myapi.post(url="/api/v1.0/schools/{}/access_points/".format(school_id), body=i)
+
