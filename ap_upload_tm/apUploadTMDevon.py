@@ -17,8 +17,6 @@ print(bssids['name'][0])
 
 print(len(bssids['name'])) # 479 rows in bssids df
 
-import numpy as np
-
 """
 
 data = {}
@@ -26,7 +24,7 @@ data['key'] = 'value'
 json_data = json.dumps(data)
 
 """
-counter = 0
+
 tm_aps = {}
 data = {}
 
@@ -38,6 +36,46 @@ for i in range(0, 478):
 
 
     if pd.notna(bssids['name'][i]):  # check to see if you have an item in the row.
+
+        # per name of bssid dictioinary put all the mac addresses as a list in the new dictionary
+        # match the name and add all mac addresses to the dictionary already created
+
+        temp_dict = {}
+
+        # created timestamp
+        temp_dict['created_timestamp'] = 0
+
+        # add ssid
+        temp_dict['ssid'] bssids['ap_name'][i]
+
+        # add  addresses
+        temp_dict['mac_addresses'] = []
+        temp_dict['mac_addresses'].append(bssids['mac'][i])
+        # print(bssids['room'][i])
+
+        # add mac address
+        temp_dict['mac'] = sheet1['mac'][i]
+        # print(bssids['mac'][i])
+
+        # building
+        temp_dict['building'] = sheet1['ssid'][i]
+
+        # description set to a string
+        temp_dict['description'] = ""
+
+        # Vereified set to true
+        temp_dict['verified'] = True
+
+        # Floors set to a list
+        temp_dict['floors'] = []
+
+        # set ip address as a string
+        temp_dict['ip_address'] = ""
+
+        # serial  set to a string
+        temp_dict['serial'] = ""
+
+        data['data'].append(temp_dict)
 
         # add name
         name = bssids['name'][i]
@@ -69,11 +107,9 @@ for i in range(0, 478):
             if i == 478:
                 break
 
-        temp_dict['bssids'] = bssid_list
+        temp_dict['mac_addresses'] = bssid_list
 
-        counter += 1
-
-        tm_aps[name] = temp_dict
+        data['data'] = tm_aps[name] = temp_dict
 
 # print(tm_aps)
 # print(temp_dict)
@@ -86,3 +122,57 @@ jsonfile = open('file.json', 'w')
 # json.dump(dictionary, file_to_write_to, indent=4)
 
 json.dump(tm_aps, jsonfile, indent=4)
+
+"""---------------- next shhet "sheet 1 " -----------------"""
+
+sheet1.columns = ['ap_name', 'ssid', 'mac', 'site', 'building', 'room']
+
+data = {}
+data['data'] = []
+
+for i in range(0, 206):
+
+    if i < 73 or i > 99:
+
+        if pd.notna(sheet1['ap_name'][i]):  # check to see if you have an item in the row.
+
+            temp_dict = {}
+
+            # created timestamp
+            temp_dict['created_timestamp'] = 0
+
+            # add ssid
+            temp_dict['ssid'] = sheet1['ap_name'][i]
+
+            # add  addresses
+            temp_dict['mac_addresses'] = [sheet1['mac'][i]]
+            # print(bssids['room'][i])
+
+            # add mac address
+            temp_dict['mac'] = sheet1['mac'][i]
+            # print(bssids['mac'][i])
+
+            # building
+            temp_dict['building'] = sheet1['ssid'][i]
+
+            # description set to a string
+            temp_dict['description'] = ""
+
+            # Vereified set to true
+            temp_dict['verified'] = True
+
+            # Floors set to a list
+            temp_dict['floors'] = []
+
+            # set ip address as a string
+            temp_dict['ip_address'] = ""
+
+            # serial  set to a string
+            temp_dict['serial'] = ""
+
+            data['data'].append(temp_dict)
+
+
+# jsonfile2 = open('file2.json', 'w')
+#
+# json.dump(data, jsonfile2, indent=4)
