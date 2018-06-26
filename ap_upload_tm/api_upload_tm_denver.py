@@ -1,49 +1,88 @@
-# adding in Urls
-import requests
-import simplejson as json
-import base64
+import pandas as pd
+import json
+
+bssids = pd.read_csv("APs/BSSIDs-Table 1.csv")
+sheet1 = pd.read_csv("APs/Sheet1-Table 1.csv")
+
+bssids.columns = ['room', 'name', 'mac', 'bssids', 'del']
+del bssids['del']
+
+data = {}
+temp_dict = {}
+temp_dict2 = []
+
+for i in range(0, 478):
+
+    if pd.notna(bssids['name'][i]):  # check to see if you have an item in the row.
+
+        temp_dict = {}
+        temp_dict['ssid'] = bssids['name'][i].replace("id=", "")
+        temp_dict['mac_addresses'] = []
+        temp_dict['mac_addresses'].append(bssids['mac'][i].replace("base=", ""))
+        temp_dict['mac_addresses'].append(bssids['bssids'][i].replace("bssid=", ""))
+
+        while pd.notna(bssids['bssids'][i+1]):
+            i += 1
+
+            if i <= 478 and pd.notna(bssids['bssids'][i]):
+
+                temp_dict['mac_addresses'].append(bssids['bssids'][i].replace("bssid=", ""))
+
+            if i == 478:
+                break
+
+        temp_dict2.append(temp_dict)
+
+# TURNS TEMP_DICT2 INTO A JSON
+
+# jsonfile = open('file.json', 'w')
+#
+# json.dump(temp_dict2, jsonfile, indent=4)
+
+sheet1.columns = ['ap_name', 'ssid', 'mac', 'site', 'building', 'room']
+
+data = []
+
+for i in range(0, 206):
+
+    if i < 73 or i > 99:  # Rows in between have no importance
+
+        if pd.notna(sheet1['ap_name'][i]):  # check to see if you have an item in the row.
+
+            temp_dict = {}
+
+            # add ssid
+            temp_dict['ssid'] = sheet1['ap_name'][i]
+
+            # add  addresses
+            temp_dict['mac_addresses'] = [sheet1['mac'][i]]
+
+            for item in temp_dict2:
+                if item['ssid'] == temp_dict['ssid']:
+                    temp_dict['mac_addresses'] += item['mac_addresses']
 
 
-class API(object):
-    def __init__(self, username, password, keyspace="devkeyspace", base_url="https://dev-api.degreeanalytics.com"):
-        self.username = username
-        self.password = password
-        self.keyspace = keyspace
-        self.base_url = base_url
+            # building
+            temp_dict['building'] = sheet1['building'][i]
 
-    def _basic_auth(self):
-        return "Basic " + base64.b64encode(("%s:%s" % (self.username, self.password)).encode("latin1")).strip().decode(
-            "latin1")
+            # description set to a string
+            temp_dict['description'] = ""
 
-    @property
-    def headers(self):
-        return {
-            "Content-Type": "application/json",
-            "Authorization": self._basic_auth()
-        }
+            # Vereified set to true
+            temp_dict['verified'] = False
 
-    @classmethod
-    def _response(cls, out):
-        if out.status_code == 200:
-            return (out.json() or {}).get("data")
+            # Floors set to a list
+            temp_dict['floors'] = []
 
-        raise Exception("{}: {}".format(out.status_code, out.text))
+            # set ip address as a string
+            temp_dict['ip_address'] = ""
 
-    def _build_url(self, url: str) -> str:
-        return self.base_url + url
+            # serial  set to a string
+            temp_dict['serial'] = ""
 
-    def get(self, url: str, params: dict = {}):
-        url = self._build_url(url=url)
-        return self._response(requests.get(url=url, headers=self.headers, params=params))
+            data.append(temp_dict)
 
-    def post(self, url: str, body: Dict[str, Any], params: Dict[str, Any] = None):
-        url = self._build_url(url=url)
-        return self._response(requests.post(url=url, data=jsonify(body), params=params, headers=self.headers))
 
-    def put(self, url: str, body: Dict[str, Any], params: Dict[str, Any] = None):
-        url = self._build_url(url=url)
-        return self._response(requests.put(url=url, data=jsonify(body), params=params, headers=self.headers))
-
-    def delete(self, url: str):
-        url = self._build_url(url=url)
-        return self._resonse(requests.delete(url=url, headers=self.headers))p
+jsonfile2 = open('file2.json', 'w')
+json.dump(data, jsonfile2, indent=4)
+print('done')

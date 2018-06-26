@@ -9,3 +9,4 @@ matplotlib.pyplot
 shapely.geometry
 sklearn.cluster.KMeans
 simplejson
+pandas
