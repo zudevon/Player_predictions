@@ -1,10 +1,9 @@
 # adding in Urls
+import base64
+from typing import Dict, Any
+
 import requests
 import simplejson as json
-import base64
-from typing import List, Dict, Any
-from ap_upload_tm import apUploadTMDevon
-from ap_upload_tm import APs
 
 
 class API(object):
@@ -48,15 +47,4 @@ class API(object):
 
     def delete(self, url: str):
         url = self._build_url(url=url)
-        return self._resonse(requests.delete(url=url, headers=self.headers))
-
-
-myapi = API(username="devon.rasch@degreeanalytics.com", password="123.Devon")
-
-school_id = "d22a7e00-dca9-4d02-84f6-6d52f73ecd18"
-dictionary = apUploadTMDevon.data
-
-for i in apUploadTMDevon.data:
-
-    my_new_ap = myapi.post(url="/api/v1.0/schools/{}/access_points/".format(school_id), body=i)
-
+        return self._response(requests.delete(url=url, headers=self.headers))
