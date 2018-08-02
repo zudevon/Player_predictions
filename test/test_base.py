@@ -2,15 +2,35 @@ import unittest
 import utils
 import simplejson as json
 from shapely.geometry import Polygon
-import math
+
+# Run utils.coor_extend()
+# test_zone_expansion.py holds the correct function so does utils.py
 
 
 class TestClass(unittest.TestCase):
+
+    def test_zone_equalizer(self):
+
+        """ Test to see if coordinates ran more than twice equal the same amount both times"""
+
+        basicSquare = [(0, 0), (0, 1), (1, 1), (1, 0)]
+        basicTriangle = [(1,1), (1,0), (0,0)]
+
+        new_square = utils.coord_extend(coords=basicSquare, feet_expand=10)
+        new_triangle = utils.coord_extend(coords=basicTriangle, feet_expand=10)
+
+        for i in range(0, 20):
+            self.assertEqual(utils.coord_extend(coords=basicSquare, feet_expand=10),
+                             new_square)
+            self.assertEqual(utils.coord_extend(coords=basicTriangle, feet_expand=10),
+                             new_triangle)
+
 
     def test_zone_expand(self):
         json_data = open('../json_files/100zones.json').read()
 
         zones = json.loads(json_data)
+
 
         for x in (range(0, len(zones['data']))):
 

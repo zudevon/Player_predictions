@@ -1,18 +1,13 @@
 from shapely.geometry import LinearRing
 
 
-def coord_extend(coords, feet_expand):
+def coord_extend(coords: list, feet_expand: int):
 
     def lat_convert(n):
         degrees = n / 305775
         return degrees
 
-    #def coordinate_get(x):
-        #return [(i[0], i[1]) for i in x]
-
-    #get = coordinate_get(coords)
-
-    feet_expand = lat_convert(int)
+    feet_expand = lat_convert(feet_expand)
 
     obj = LinearRing(coords)
 
@@ -24,8 +19,7 @@ def coord_extend(coords, feet_expand):
     else:
         orient = 'right'
 
-
-    offset=obj.parallel_offset(feet_expand,orient,join_style=2,mitre_limit=(1000.0))
+    offset = obj.parallel_offset(feet_expand,orient,join_style=2,mitre_limit=(1000.0))
 
     offset = LinearRing(offset)
 
