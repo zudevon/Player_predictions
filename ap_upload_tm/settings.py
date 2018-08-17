@@ -1,5 +1,0 @@
-USERNAME = "PROVIDE USERNAME"
-PASSWORD = "PROVIDE PASSWORD"
-SCHOOL_ID = "PROVIDE"
-BASE_API_URL = "https://dev-api.degreeanalytics.com"
-KEYSPACE = "devkeyspace"
