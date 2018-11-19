@@ -1,3 +1,13 @@
+#########################################
+#                                       #
+#           Created By:                 #
+#    Devon Rasch - Sr. Engineer         #
+#    Denver Comp - Jr. Engineer         #
+#   Week 1 in Internship, Summer 2018   #
+#                                       #
+#########################################
+
+
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
