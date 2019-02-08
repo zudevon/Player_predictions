@@ -29,9 +29,10 @@ dribble_df = pd.read_csv("./csvData/NBA_Shot_dist - dribble stats.csv")
 for col in salary_df.select_dtypes([np.object]):
 
     salary_df[col] = salary_df[col].str.lstrip('$')
-salary_df = salary_df.replace(regex={',':''})
-salary_df = salary_df.iloc[:,[1,2]]
-salary_df.columns = ['name', 'salary']
+    # these 3 lines underneathe were tabbed inward before
+    salary_df = salary_df.replace(regex={',':''})
+    salary_df = salary_df.iloc[:,[1,2]]
+    salary_df.columns = ['name', 'salary']
 
 heightWeight_df = heightWeight_df.iloc[:,[0,7,9]]
 
